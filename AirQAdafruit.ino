@@ -23,6 +23,8 @@
 #include "Sensor.hpp"
 #include "AppWeb.hpp"
 
+#include "Adafruit.cpp"
+
 
 class AirQ_GFX : public lgfx::LGFX_Device {
     lgfx::Panel_GDEW0154D67 _panel_instance;
@@ -443,6 +445,8 @@ void mainApp(ButtonEvent_t *buttonEvent) {
 
     int64_t currentMillisecond = esp_timer_get_time() / 1000;
 
+    My_Adafruit_MQTT aMQTT;
+
     if (
         (
             buttonEvent->id == E_BUTTON_A
@@ -510,7 +514,7 @@ void mainApp(ButtonEvent_t *buttonEvent) {
         }
         lastCountDownUpdate = currentMillisecond;
     }
-
+    aMQTT.MyConnect();
     if (WiFi.isConnected() && runingEzdataUpload && ezdataUploadCount-- > 0) {
         ezdataHanlder.setDeviceToken(db.ezdata2.devToken);
         BUTTON_TONE();

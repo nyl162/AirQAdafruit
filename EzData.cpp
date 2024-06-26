@@ -5,6 +5,8 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
+#include "Adafruit.cpp"
+
 
 EzData::EzData(const char *dev_token, const char *key) {
     _device_token = dev_token;
@@ -132,14 +134,19 @@ bool EzData::set(const char *value, size_t len) {
 }
 
 bool EzData::_set(uint8_t *payload, size_t size) {
-    bool ret = false;
+        bool ret = false;
     HTTPClient http;
+    My_Adafruit_MQTT aMQTT;
+
     String url = String("http://ezdata2.m5stack.com/api/v2/") + _device_token + String("/add");
     DynamicJsonDocument doc(1024);
 
     http.begin(url);
     http.addHeader("Content-Type", "application/json");
     int httpCode = http.POST((uint8_t *)payload, size);
+    
+    aMQTT.MyPublish((uint8_t *)payload);
+
     if (httpCode == HTTP_CODE_OK) {
         DeserializationError error = deserializeJson(doc, http.getString());
         ret = false;
@@ -156,6 +163,7 @@ bool EzData::_set(uint8_t *payload, size_t size) {
     } else {
         ret = false;
     }
+
 out:
     http.end();
     return ret;
