@@ -53,39 +53,40 @@ Adafruit_MQTT_Publish Adafruit_Pub = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME A
 /*************************** Sketch Code ************************************/
 class My_Adafruit_MQTT {
 public:
-  void MyPublish(uint8_t *data);
-  void MyConnect();
-};
+ //void MyPublish(uint8_t *data);
+ //void MyConnect();
 
-void My_Adafruit_MQTT::MyPublish(uint8_t *data) {
-  Adafruit_Pub.publish((char *)data);
-  return;
-}
 
-// Function to connect and reconnect as necessary to the MQTT server.
-// Should be called in the loop function and it will take care if connecting.
-void My_Adafruit_MQTT::MyConnect() {
-  int8_t ret;
-
-  // Stop if already connected.
-  if (mqtt.connected()) {
+  void MyPublish(uint8_t *data) {
+    Adafruit_Pub.publish((char *)data);
     return;
   }
 
-  Serial.print("Connecting to MQTT... ");
+  // Function to connect and reconnect as necessary to the MQTT server.
+  // Should be called in the loop function and it will take care if connecting.
+  void MyConnect() {
+    int8_t ret;
 
-  uint8_t retries = 3;
-  while ((ret = mqtt.connect()) != 0) { // connect will return 0 for connected
-       Serial.println(mqtt.connectErrorString(ret));
-       Serial.println("Retrying MQTT connection in 5 seconds...");
-       mqtt.disconnect();
-       delay(5000);  // wait 5 seconds
-       retries--;
-       if (retries == 0) {
-         // basically die and wait for WDT to reset me
-         while (1);
-       }
+    // Stop if already connected.
+    if (mqtt.connected()) {
+      return;
+    }
+
+    Serial.print("Connecting to MQTT... ");
+
+    uint8_t retries = 3;
+    while ((ret = mqtt.connect()) != 0) { // connect will return 0 for connected
+        Serial.println(mqtt.connectErrorString(ret));
+        Serial.println("Retrying MQTT connection in 5 seconds...");
+        mqtt.disconnect();
+        delay(5000);  // wait 5 seconds
+        retries--;
+        if (retries == 0) {
+          // basically die and wait for WDT to reset me
+          while (1);
+        }
+    }
+
+    Serial.println("MQTT Connected!");
   }
-
-  Serial.println("MQTT Connected!");
-}
+};

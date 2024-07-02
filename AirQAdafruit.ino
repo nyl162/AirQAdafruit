@@ -23,8 +23,6 @@
 #include "Sensor.hpp"
 #include "AppWeb.hpp"
 
-#include "Adafruit.cpp"
-
 
 class AirQ_GFX : public lgfx::LGFX_Device {
     lgfx::Panel_GDEW0154D67 _panel_instance;

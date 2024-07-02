@@ -4,6 +4,7 @@
 #include <WString.h>
 #include <type_traits>
 
+#include "Adafruit.cpp"
 
 class EzData
 {

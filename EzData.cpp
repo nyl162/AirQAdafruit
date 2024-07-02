@@ -5,7 +5,6 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-#include "Adafruit.cpp"
 
 
 EzData::EzData(const char *dev_token, const char *key) {
